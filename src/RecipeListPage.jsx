@@ -1,5 +1,6 @@
+//RecipeListPage
 import { useState } from 'react';
-import { Center, Heading, Input } from '@chakra-ui/react';
+import { Center, Heading, Input} from '@chakra-ui/react';
 import { data } from "../src/utils/data"
 import {
   Card,
@@ -11,11 +12,14 @@ import {
   ButtonGroup,
   Button,
   Divider,
-  Box,
+  Box
+  
 } from '@chakra-ui/react';
 
 
 export const RecipeListPage = ({ setSelectedRecipe }) => {
+  console.log('Rendering RecipeListPage');
+
   const [searchQuery, setSearchQuery] = useState(' ');
   const [selectedLabels, setSelectedLabels] = useState([]);
 
@@ -41,9 +45,8 @@ export const RecipeListPage = ({ setSelectedRecipe }) => {
   };
   
   return (
-    <Center h="100vh" flexDir="column" color={'green.50'}>
-      <Box maxW="32rem">
-        
+    <Center h="100vh" flexDir="column" color={'green.500'}>
+      <Box maxW="32rem" height="100%">
         <Heading mb={3}>Your Recipe App</Heading>
         <Stack spacing={3}>
           <Input
@@ -57,7 +60,37 @@ export const RecipeListPage = ({ setSelectedRecipe }) => {
           />
         </Stack>
       </Box>
-      <div>
+     
+      {handleSearch().map(({ recipe }) => (
+       <Card>
+       <CardBody>
+         <Image src={recipe.image} alt={recipe.label} borderRadius="lg" />
+         <Stack mt="6" spacing="3">
+           <Heading size="md">{recipe.label}</Heading>
+           <Text
+             fontSize={{
+               base: 'sm',
+               sm: 'md',
+               md: 'lg',
+               lg: 'xl',
+               xl: '2xl',
+             }}
+             color={'green.700'}
+           >
+             <p>Meal type: {recipe.mealType}</p>
+             <p>Dish type: {recipe.dishType}</p>
+             <p>Diet label: {recipe.dietLabels?.join(', ')}</p>
+             <div>
+               {recipe.cautions?.length > 0 && (
+                 <div>
+                   <strong>Cautions:</strong> {recipe.cautions.join(', ')}
+                 </div>
+               )}
+               {recipe.healthLabels.includes('Vegan') && <div><strong>Vegan:</strong></div>}
+               {recipe.healthLabels.includes('Vegetarian') && <div><strong>Vegetarian:</strong></div>}
+             </div>
+             <Divider/>
+             <div>
         <Input
           type="checkbox"
           checked={selectedLabels.includes('Pescatarian')}
@@ -69,11 +102,12 @@ export const RecipeListPage = ({ setSelectedRecipe }) => {
           checked={selectedLabels.includes('Gluten-Free')}
           onChange={() => handleLabelToggle('Gluten-Free')}
         />
-        Gluten-Free
+       Gluten-Free
         <Input
           type="checkbox"
           checked={selectedLabels.includes('Sesame-Free')}
           onChange={() => handleLabelToggle('Sesame-Free')}
+          size="sm"
         />
         Sesame-Free
         <Input
@@ -88,57 +122,22 @@ export const RecipeListPage = ({ setSelectedRecipe }) => {
           onChange={() => handleLabelToggle('Vegan')}
         />
         Vegan
-      </div>
-      {handleSearch().map(({ recipe }) => (
-        <Card
-          maxW="sm"
-          key={recipe.foodId}
-          onClick={() => setSelectedRecipe(recipe)}
-          color={'green.500'}
-        >
-          <CardBody >
-            <Image src={recipe.image} alt={recipe.label} borderRadius="lg" />
-            <Stack mt="6" spacing="3" >
-              <Heading size="md">{recipe.label} </Heading>
-              <Text
-                fontSize={{
-                  base: 'sm',
-                  sm: 'md',
-                  md: 'lg',
-                  lg: 'xl',
-                  xl: '2xl',
-                }}
-                color={'green.700'}
-              >
-                {recipe.dietLabels.length > 0 && (
-                  <p>Diet label: {recipe.dietLabels.join(', ')}</p>
-                )}
-
-                {recipe.cautions.length > 0 && (
-                  <p>Cautions: {recipe.cautions.join(', ')}</p>
-                )}
-                <p>Meal type: {recipe.mealType}</p>
-                <p>Dish type: {recipe.dishType}</p>
-                {recipe.healthLabels.includes('Vegan') && <p>Vegan</p>}
-
-                {recipe.healthLabels.includes('Vegetarian') && (
-                  <p>Vegetarian</p>
-                )}
-              </Text>
-            </Stack>
-          </CardBody>
+        </div>
+           </Text>
+         </Stack>
+       </CardBody>
           <Divider />
           <CardFooter>
-            <ButtonGroup spacing="2"
-          colorScheme="teal" onClick={clickFn} {...props}>
- 
-              <Button variant="solid" colorScheme="green">
-                Selected recipe
-              </Button>
-              <Button variant="ghost" colorScheme="green">
-                go back
-              </Button>
-            </ButtonGroup>
+        
+  <ButtonGroup spacing="2" colorScheme="teal">
+    <Button variant="solid" colorScheme="green">
+      Selected recipe
+    </Button>
+    <Button variant="ghost" colorScheme="green">
+      Go back
+    </Button>
+  </ButtonGroup>
+
           </CardFooter>
         </Card>
       ))}
