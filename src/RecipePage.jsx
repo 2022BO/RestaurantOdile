@@ -60,7 +60,7 @@ const RecipePage = ({ selectedRecipe, goBack }) => {
           {ingredientLines.map((ingredient, index) => (
     <React.Fragment key={index}>
       {ingredient}
-      {index < ingredientLines.length - 1 && <br />} {/* Voeg <br /> toe tussen de ingrediënten, behalve na de laatste */}
+      {index < ingredientLines.length - 1 && <br />} 
     </React.Fragment>
   ))}
         </Text>
